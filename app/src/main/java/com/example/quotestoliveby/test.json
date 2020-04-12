@@ -1,0 +1,11 @@
+{
+  "categories": [
+    "dev"
+  ],
+  "created_at": "2020-01-05 13:42:19.324003",
+  "icon_url": "https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+  "id": "jfbsb24mtawqb-s5zlx8mg",
+  "updated_at": "2020-01-05 13:42:19.324003",
+  "url": "https://api.chucknorris.io/jokes/jfbsb24mtawqb-s5zlx8mg",
+  "value": "Chuck Norris does not code in cycles, he codes in strikes."
+}
