@@ -1,11 +1,11 @@
 package com.example.quotestoliveby;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.gson.Gson;
@@ -42,11 +42,16 @@ public class MainActivity extends AppCompatActivity {
 		mBtnShowQuote.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+				mTxtQuote.setText("Patience is a virtue...");
+				mBtnShowQuote.setText("LOADING");
 				quoteCall.clone().enqueue(new Callback<Quote>() {
 					@Override
 					public void onResponse(Call<Quote> call, Response<Quote> response) {
 						String quoteString = response.body().getValue();
 						mTxtQuote.setText(quoteString);
+						mBtnShowQuote.setText("ANOTHER ONE");
+
 					}
 
 					@Override
