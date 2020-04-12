@@ -4,78 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".MainActivity">
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btnShowQuote"
-        android:layout_width="200dp"
+        style="@style/Widget.Button.Lowercase"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_marginBottom="32dp"
-        android:text="ANOTHER ONE"
-        android:textColor="#FFFFFF"
-        app:backgroundTint="@color/colorPrimary"
+        android:text="tap for more"
+        android:textAllCaps="false"
+        android:textColor="#80FFFFFF"
+        app:backgroundTint="#000000"
         app:icon="@android:drawable/ic_popup_sync"
-        app:iconTint="#FFFFFF"
+        app:iconSize="20dp"
+        app:iconTint="#80FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:rippleColor="#80FFFFFF" />
+        app:rippleColor="#33FFFFFF" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+    <TextView
+        android:id="@+id/txtQuote"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginBottom="32dp"
-        android:elevation="8dp"
-        app:cardBackgroundColor="#010101"
-        app:cardCornerRadius="32dp"
-        app:cardElevation="8dp"
-        app:cardMaxElevation="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnShowQuote"
+        android:layout_marginBottom="64dp"
+        android:capitalize="none"
+        android:fontFamily="sans-serif-condensed"
+        android:letterSpacing="0.05"
+        android:lineSpacingExtra="2sp"
+        android:text="tap on the button. go ahead. do it"
+        android:textAlignment="viewStart"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/txtQuote"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="32dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginRight="32dp"
-                android:layout_marginBottom="0dp"
-                android:fontFamily="sans-serif-condensed"
-                android:text="Tap on the Button. Go ahead. Do it. "
-                android:textAlignment="viewStart"
-                android:textColor="#FFFFFF"
-                android:textSize="36sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:layout_alignTop="@id/txtQuote"
-                android:layout_alignBottom="@id/txtQuote"
-                android:layout_alignParentBottom="false"
-                android:layout_marginStart="16dp"
-                android:background="#FFFFFF" />
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnCopy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="#000000"
+        app:hoveredFocusedTranslationZ="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:pressedTranslationZ="0dp"
+        app:rippleColor="#33FFFFFF"
+        app:srcCompat="?attr/actionModeCopyDrawable"
+        app:tint="#80FFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
