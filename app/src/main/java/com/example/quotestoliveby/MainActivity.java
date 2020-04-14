@@ -31,65 +31,58 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton mBtnCopy;
     TextView mTxtQuote;
     String quoteString = "";
-	String category;
+    String category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
-
-        //////////////
-        String[] COUNTRIES = new String[]{
-        		"animal",
-				"career",
-				"celebrity",
-				"dev",
-				"explicit",
-				"fashion",
-				"food",
-				"history",
-				"money",
-				"movie",
-				"music",
-				"political",
-				"religion",
-				"science",
-				"sport",
-				"travel"};
-
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(
-                        this,
-                        R.layout.dropdown_menu_popup_item,
-                        COUNTRIES);
-
-        AutoCompleteTextView editTextFilledExposedDropdown =
-                findViewById(R.id.spinner);
-        editTextFilledExposedDropdown.setAdapter(adapter);
-		editTextFilledExposedDropdown.setHint("choose one");
-		editTextFilledExposedDropdown.setInputType(0);
-
-		editTextFilledExposedDropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-				category = adapterView.getItemAtPosition(i).toString();
-			}
-		});
-
-
-
-
-        //editTextFilledExposedDropdown.setText("dev");
-		///////////////
-
-
         mBtnShowQuote = findViewById(R.id.btnShowQuote);
         mBtnCopy = findViewById(R.id.btnCopy);
         mTxtQuote = findViewById(R.id.txtQuote);
 
+        //hiding the action bar for a cleaner look
+        getSupportActionBar().hide();
 
+        //an array of all the joke categories offered by the API
+        String[] categories = new String[]{
+                "animal",
+                "career",
+                "celebrity",
+                "dev",
+                "explicit",
+                "fashion",
+                "food",
+                "history",
+                "money",
+                "movie",
+                "music",
+                "political",
+                "religion",
+                "science",
+                "sport",
+                "travel"
+        };
+
+        //creating an arrayAdapter to adapt the array above to the dropdown menu
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, categories);
+
+        //setting the adapter, the hint, and disabling text input
+        AutoCompleteTextView editTextFilledExposedDropdown = findViewById(R.id.spinner);
+        editTextFilledExposedDropdown.setAdapter(adapter);
+        editTextFilledExposedDropdown.setHint("choose one");
+        editTextFilledExposedDropdown.setInputType(0);
+
+        //changing the String value stored in category
+        editTextFilledExposedDropdown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                category = adapterView.getItemAtPosition(i).toString();
+            }
+        });
+
+        //initializing Retrofit by supplying it a baseUrl to work with and specifying that it will use Gson
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("https://api.chucknorris.io/")
                 .addConverterFactory(GsonConverterFactory.create());
@@ -99,18 +92,25 @@ public class MainActivity extends AppCompatActivity {
         QuoteService quoteService = retrofit.create(QuoteService.class);
 
 
-
         mBtnShowQuote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-				Call<Quote> quoteCall = quoteService.createQuote(category);
-				YoYo.with(Techniques.FadeOutDown).duration(200).playOn(mTxtQuote);
+
+                //passes the category selected by the spinner to the Call
+                Call<Quote> quoteCall = quoteService.createQuote(category);
+
+                //fancy animations
+                YoYo.with(Techniques.FadeOutDown).duration(200).playOn(mTxtQuote);
                 mTxtQuote.setText("patience is a virtue...");
                 YoYo.with(Techniques.FadeInDown).duration(200).playOn(mTxtQuote);
                 mBtnShowQuote.setText("loading...");
+
+                // .clone() allows for the service to be called more than once, i.e. repeatedly
                 quoteCall.clone().enqueue(new Callback<Quote>() {
                     @Override
                     public void onResponse(Call<Quote> call, Response<Quote> response) {
+
+                        //converts it to lowercase for #AESTHETICS
                         quoteString = response.body().getValue().toLowerCase();
                         mTxtQuote.setText(quoteString);
                         YoYo.with(Techniques.FadeInDown).duration(200).playOn(mTxtQuote);
@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Quote> call, Throwable t) {
+                        //notifies the user in case of error
                         Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -132,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 if (quoteString.equals("")) {
                     Toast.makeText(MainActivity.this, "Nothing copied! Press the button first", Toast.LENGTH_LONG).show();
                 } else {
+                    //copies the quote to the clipboard if it exists
                     ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("label", quoteString);
                     clipboard.setPrimaryClip(clip);
@@ -141,15 +143,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-
-    private void deserialize() {
-        String userJson = "{\"categories\":[\"dev\"],\"created_at\":\"2020-01-05 13:42:19.324003\",\"icon_url\":\"https://assets.chucknorris.host/img/avatar/chuck-norris.png\",\"id\":\"jfbsb24mtawqb-s5zlx8mg\",\"updated_at\":\"2020-01-05 13:42:19.324003\",\"url\":\"https://api.chucknorris.io/jokes/jfbsb24mtawqb-s5zlx8mg\",\"value\":\"Chuck Norris does not code in cycles, he codes in strikes.\"}";
-        Gson gson = new Gson();
-        Quote quote = gson.fromJson(userJson, Quote.class);
-
     }
 }
-//	https://api.chucknorris.io/jokes/random?category=dev
