@@ -3,6 +3,7 @@ package com.example.quotestoliveby;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,12 +13,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
     ExtendedFloatingActionButton mBtnShowQuote;
     FloatingActionButton mBtnCopy;
+    FloatingActionButton mBtnViewDb;
     TextView mTxtQuote;
     String quoteString = "";
     String category;
+    AppDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBtnShowQuote = findViewById(R.id.btnShowQuote);
         mBtnCopy = findViewById(R.id.btnCopy);
+        mBtnViewDb = findViewById(R.id.btnViewDb);
         mTxtQuote = findViewById(R.id.txtQuote);
 
         //hiding the action bar for a cleaner look
@@ -64,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
                 "sport",
                 "travel"
         };
+
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database-name").build();
 
         //creating an arrayAdapter to adapt the array above to the dropdown menu
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_menu_popup_item, categories);
@@ -113,8 +121,13 @@ public class MainActivity extends AppCompatActivity {
                         //converts it to lowercase for #AESTHETICS
                         quoteString = response.body().getValue().toLowerCase();
                         mTxtQuote.setText(quoteString);
+
+                        new AddToDbTask().execute(response.body());
+
                         YoYo.with(Techniques.FadeInDown).duration(200).playOn(mTxtQuote);
                         mBtnShowQuote.setText("tap for more");
+
+
                     }
 
                     @Override
@@ -143,5 +156,59 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mBtnViewDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new ViewDbTask().execute();
+
+            }
+        });
+
     }
+
+    public class AddToDbTask extends AsyncTask<Quote, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Quote... quotes) {
+
+            db.quoteDao().insertAll(quotes);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(MainActivity.this, "Saved to DB!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public class ViewDbTask extends AsyncTask<Void, Void, Void>{
+
+        String output;
+        List<Quote> quoteStrings;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            quoteStrings = db.quoteDao().getAll();
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for(int i = 0; i < quoteStrings.size(); i++) {
+                stringBuilder.append(quoteStrings.get(i).getValue() + "\n\n");
+            }
+
+            output = stringBuilder.toString();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(MainActivity.this, output, Toast.LENGTH_SHORT).show();
+
+            //Toast.makeText(MainActivity.this, "Saved to DB!", Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

@@ -1,20 +1,25 @@
 package com.example.quotestoliveby;
 
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Quote {
 
-	@SerializedName("categories")
-	@Expose
-	private List<String> categories = null;
+
 	@SerializedName("created_at")
 	@Expose
 	private String createdAt;
 	@SerializedName("icon_url")
 	@Expose
 	private String iconUrl;
+	@PrimaryKey
+	@NonNull
 	@SerializedName("id")
 	@Expose
 	private String id;
@@ -24,17 +29,12 @@ public class Quote {
 	@SerializedName("url")
 	@Expose
 	private String url;
+	@ColumnInfo(name = "quote_string")
 	@SerializedName("value")
 	@Expose
 	private String value;
 
-	public List<String> getCategories() {
-		return categories;
-	}
 
-	public void setCategories(List<String> categories) {
-		this.categories = categories;
-	}
 
 	public String getCreatedAt() {
 		return createdAt;

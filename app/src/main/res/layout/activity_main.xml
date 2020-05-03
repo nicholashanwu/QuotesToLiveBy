@@ -66,6 +66,25 @@
         app:srcCompat="?attr/actionModeCopyDrawable"
         app:tint="#80FFFFFF" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnViewDb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:elevation="0dp"
+        app:backgroundTint="#000000"
+        app:elevation="0dp"
+        app:hoveredFocusedTranslationZ="0dp"
+        app:layout_constraintStart_toEndOf="@+id/btnCopy"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="20dp"
+        app:pressedTranslationZ="0dp"
+        app:rippleColor="#33FFFFFF"
+        app:srcCompat="?attr/actionModeCopyDrawable"
+        app:tint="#80FFFFFF" />
+
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_width="160dp"
